@@ -132,8 +132,8 @@ static void wifi_init(void)
     ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
     wifi_config_t wifi_config = {
         .sta = {
-            .ssid = "jony",//CONFIG_WIFI_SSID,
-            .password = "jfcr920210",//CONFIG_WIFI_PASSWORD,
+            .ssid = "HUAWEI P8 Alejho",//CONFIG_WIFI_SSID,
+            .password = "11235813",//CONFIG_WIFI_PASSWORD,
         },
     };
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
