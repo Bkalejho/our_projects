@@ -1,4 +1,4 @@
-//prueba computador jony
+//16092019
 
 
 
@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
+
 #include "esp_wifi.h"
 #include "esp_system.h"
 #include "nvs_flash.h"
@@ -26,14 +27,34 @@
 
 #include "driver/adc.h"
 
+
+#include "lwip/apps/sntp.h"
+#include <time.h>
+
+
+
 static const char *TAG = "MQTT_EXAMPLE";
 
+/* FreeRTOS event group to signal when we are connected & ready to make a request */
 static EventGroupHandle_t wifi_event_group;
+
+/* The event group allows multiple bits for each event,
+   but we only care about one event - are we connected
+   to the AP with an IP? */
 const static int CONNECTED_BIT = BIT0;
+
 
 esp_mqtt_client_handle_t client_h;
 bool mqtt_con = 0;
 uint8_t con_flag = 0;
+
+uint32_t result2;
+const char *TIMESTAMP_LABEL ="timestamp";
+char fecha[100];
+
+
+
+ 
 
 #define BROKER_PORT 1883
 #define BROKER_URL  "mqtt://industrial.api.ubidots.com"
@@ -136,8 +157,8 @@ static void wifi_init(void)
     ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
     wifi_config_t wifi_config = {
         .sta = {
-            .ssid = "HUAWEI P8 Alejho",//CONFIG_WIFI_SSID,
-            .password = "11235813",//CONFIG_WIFI_PASSWORD,
+            .ssid = "jony",//CONFIG_WIFI_SSID,
+            .password = "jfcr920210",//CONFIG_WIFI_PASSWORD,
         },
     };
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
@@ -162,6 +183,8 @@ static void mqtt_app_start(void)
     client_h = esp_mqtt_client_init(&mqtt_cfg);
     esp_mqtt_client_start(client_h);
 }
+
+//-----------------------adc task----------------------------
 
 static void adc_task()
 {
@@ -190,15 +213,76 @@ static void adc_task()
             sprintf(context_mensaje,"%ccontext%c: {%cname%c: %cBaja Temperatura%c}", '"', '"', '"', '"', '"', '"');
         }
 
-        sprintf(mensaje,"{%cvalue%c: %d, %s}", '"', '"',adc_data[0], context_mensaje);
-
+        sprintf(mensaje,"{%cvalue%c: %d, %s,\"%s\": %s}", '"', '"',adc_data[0], context_mensaje,TIMESTAMP_LABEL,fecha);
         printf("%s \r\n", mensaje);
-
         esp_mqtt_client_publish(client_h, UBI_TOPIC, mensaje, 0, 1, 0);
-
         context = !context;
-
         vTaskDelay(120000 / portTICK_RATE_MS);
+    }
+}
+
+//---------------------------------------------------------------
+
+//------------------------------------sntp----------------------
+static void initialize_sntp(void)
+{
+    ESP_LOGI(TAG, "Initializing SNTP");
+    sntp_setoperatingmode(SNTP_OPMODE_POLL);
+    sntp_setservername(0, "pool.ntp.org");
+    sntp_init();
+}
+
+
+static void obtain_time(void)
+{
+    xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT,
+                        false, true, portMAX_DELAY);
+    initialize_sntp();
+
+    // wait for time to be set
+    time_t now = 0;
+    struct tm timeinfo = { 0 };
+    int retry = 0;
+    const int retry_count = 10;
+
+    while (timeinfo.tm_year < (2016 - 1900) && ++retry < retry_count) {
+        ESP_LOGI(TAG, "Waiting for system time to be set... (%d/%d)", retry, retry_count);
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
+        time(&now);
+        localtime_r(&now, &timeinfo);
+    }
+}
+
+static void sntp_example_task(void *arg)
+{
+    time_t now;
+    struct tm timeinfo;
+
+    // update 'now' variable with current time
+    time(&now);
+    localtime_r(&now, &timeinfo);
+
+    // Is time set? If not, tm_year will be (1970 - 1900).
+    if (timeinfo.tm_year < (2016 - 1900)) {
+        ESP_LOGI(TAG, "Time is not set yet. Connecting to WiFi and getting time over NTP.");
+        obtain_time();
+    }
+
+
+    // Set timezone to Standard Time
+    //https://github.com/nayarsystems/posix_tz_db/blob/master/zones.csv
+    setenv("TZ", "<-05>5", 1);
+    tzset();
+
+    while (1) {
+        // update 'now' variable with current time
+        
+        result2 = time(&now);//ubidots requiere recibir el timestamp en milisegundos aqui esta en segundos
+        sprintf(fecha,"%u%c%c%c",result2,'0','0','0');//se agregan 3 ceros para enviar la trama a ubidots de forma correcta
+
+
+        //ESP_LOGI(TAG, "Free heap size: %d\n", esp_get_free_heap_size());
+        vTaskDelay(10000 / portTICK_RATE_MS);
     }
 }
 
@@ -225,8 +309,16 @@ void app_main()
 
     // 2. Create a adc task to read adc value
     xTaskCreate(adc_task, "adc_task", 2048, NULL, 5, NULL);
+    esp_err_t ret = nvs_flash_init();
 
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+
+    ESP_ERROR_CHECK(ret);
     nvs_flash_init();
     wifi_init();
+    xTaskCreate(sntp_example_task, "sntp_example_task", 2048, NULL, 10, NULL);
     mqtt_app_start();
 }

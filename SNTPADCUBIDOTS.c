@@ -288,8 +288,11 @@ static void sntp_example_task(void *arg)
         //uint32_t result3;
 
     	//result = time(&now);
+    	char fecha[100];
     	result2 = time(&now);//ubidots requiere recibir el timestamp en milisegundos aqui esta en segundos
-    
+    	sprintf(fecha,"%u",resul2);
+
+    	printf("%s",fecha);
 
     	//result2*=1000;
     	//printf("%s%u secs since the Epoch\n",
