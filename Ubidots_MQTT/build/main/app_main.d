@@ -102,7 +102,9 @@ app_main.o: \
  /home/alejho/esp/ESP8266_RTOS_SDK/components/log/include/esp_log_internal.h \
  /home/alejho/esp/ESP8266_RTOS_SDK/components/mqtt/esp-mqtt/include/mqtt_client.h \
  /home/alejho/esp/ESP8266_RTOS_SDK/components/mqtt/esp-mqtt/include/mqtt_config.h \
- /home/alejho/esp/ESP8266_RTOS_SDK/components/esp8266/include/driver/adc.h
+ /home/alejho/esp/ESP8266_RTOS_SDK/components/esp8266/include/driver/adc.h \
+ /home/alejho/esp/ESP8266_RTOS_SDK/components/lwip/lwip/src/include/lwip/apps/sntp.h \
+ /home/alejho/esp/ESP8266_RTOS_SDK/components/lwip/lwip/src/include/lwip/apps/sntp_opts.h
 
 /home/alejho/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdio.h:
 
@@ -309,4 +311,8 @@ app_main.o: \
 /home/alejho/esp/ESP8266_RTOS_SDK/components/mqtt/esp-mqtt/include/mqtt_config.h:
 
 /home/alejho/esp/ESP8266_RTOS_SDK/components/esp8266/include/driver/adc.h:
+
+/home/alejho/esp/ESP8266_RTOS_SDK/components/lwip/lwip/src/include/lwip/apps/sntp.h:
+
+/home/alejho/esp/ESP8266_RTOS_SDK/components/lwip/lwip/src/include/lwip/apps/sntp_opts.h:
 /home/alejho/esp/ESP8266_RTOS_SDK/our_projects/Ubidots_MQTT/main/./app_main.c:
