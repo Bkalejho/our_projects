@@ -28,6 +28,8 @@
 #include "lwip/apps/sntp.h"
 #include <time.h>
 
+typedef	char sample_mssg[100]; 			//Creates a variable wich is the least string size of each sample 
+
 static const char *TAG = "JAL IoT Ubidots and MQTT";
 
 /* FreeRTOS event group to signal when we are connected & ready to make a request */
@@ -65,13 +67,14 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
             break;
         case MQTT_EVENT_DISCONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
-            con_flag++;
+			mqtt_con = 0;       //bandera de conexión             
+            /*con_flag++;
             if(con_flag>=3){
                 con_flag=0;
                 vTaskDelay(2000 / portTICK_RATE_MS);
                 fflush(stdout);
                 esp_restart();
-            }
+            }*/
             break;
 
         case MQTT_EVENT_SUBSCRIBED:
@@ -169,19 +172,14 @@ static void adc_task()
     uint16_t adc_data[2];
     bool context = 0;
     char mensaje[100];
-    char context_mensaje[100];
+    char context_mensaje[50];
+    sample_mssg memory[10];
 
+    uint8_t mem_pos=0;
     char fecha[15];
     uint32_t now;
     struct tm timeinfo;
     char strftime_buf[64];
-
-    while(mqtt_con==0){
-        printf("Esperando conexión al broker mqtt para iniciar medición de temperatura \r\n");
-        vTaskDelay(2000 /portTICK_RATE_MS);
-    };
-
-    printf("conexión establecida con el broker MQTT \r\n");
 
     vTaskDelay(2000 / portTICK_RATE_MS);
 
@@ -192,8 +190,6 @@ static void adc_task()
         
         sprintf(fecha,"%u000",now);//se agregan 3 ceros para enviar la trama a ubidots de forma correcta
         printf("\r\n------------------------------------- New Sample --------------------------------------\r\n");
-        ESP_LOGI(TAG,"Timestamp for ubidots %s \r\n", fecha);
-        
         strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
         ESP_LOGI(TAG,"The current date/time in Bogotá is: %s \r\n", strftime_buf);
    
@@ -208,10 +204,32 @@ static void adc_task()
         }
 
         sprintf(mensaje,"{\"value\": %d, %s,\"timestamp\": %s}", adc_data[0], context_mensaje, fecha);
-        ESP_LOGI(TAG,"%s \r\n", mensaje);
-        esp_mqtt_client_publish(client_h, UBI_TOPIC, mensaje, 0, 1, 0);
+
+        if(mqtt_con==1){
+        	if(mem_pos!=0){
+        		for(uint8_t i=0; i<mem_pos; i++){
+        			esp_mqtt_client_publish(client_h, UBI_TOPIC, memory[i], 0, 1, 0);
+        			vTaskDelay(10000 /portTICK_RATE_MS);	
+        		}
+        		mem_pos=0;
+        	}
+        	esp_mqtt_client_publish(client_h, UBI_TOPIC, mensaje, 0, 1, 0);
+        	ESP_LOGI(TAG,"MQTT conected \r\n");	
+        	ESP_LOGI(TAG,"%s \r\n", mensaje);
+        }else{
+        	ESP_LOGI(TAG,"MQTT disconected \r\n");
+        	strcpy(memory[mem_pos],mensaje);
+        	ESP_LOGI(TAG,"%s \r\n", memory[mem_pos]);
+        	mem_pos++;
+        	if(mem_pos>=10){
+        		mem_pos=0;
+        	}
+        }
+        
+
+        
         context = !context;
-        vTaskDelay(30000 / portTICK_RATE_MS);
+        vTaskDelay(180000 / portTICK_RATE_MS); //sample time 3 minutes 
     }
 }
 
@@ -281,8 +299,15 @@ void app_main()
     
     ADC_conf();
 	// 2. Create a adc task to read adc value
-    xTaskCreate(adc_task, "adc_task", 2048, NULL, 5, NULL);
     wifi_init();
-    obtain_time();
     mqtt_app_start();
+
+    while(mqtt_con==0){
+        printf("Waiting for stable internet conection \r\n");
+        vTaskDelay(2000 /portTICK_RATE_MS);
+    }
+
+    printf("Internet conection succesfull \r\n");
+    obtain_time();
+    xTaskCreate(adc_task, "adc_task", 4096, NULL, 5, NULL);
 }
