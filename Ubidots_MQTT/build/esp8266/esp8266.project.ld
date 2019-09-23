@@ -1,6 +1,6 @@
 /* Automatically generated file; DO NOT EDIT */
 /* Espressif IoT Development Framework Linker Script */
-/* Generated from: /home/alejho/esp/ESP8266_RTOS_SDK/components/esp8266/ld/esp8266.project.ld.in */
+/* Generated from: /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/esp8266/ld/esp8266.project.ld.in */
 
 /*  Default entry point:  */
 ENTRY(call_start_cpu);
@@ -83,10 +83,9 @@ SECTIONS
     _iram_text_start = ABSOLUTE(.);
 
     *( .iram1  .iram1.*)
-    *libphy.a:( .literal  .literal.*  .text  .text.*)
     *libspi_flash.a:spi_flash_raw.*( .literal  .literal.*  .text  .text.*)
+    *libphy.a:( .literal  .literal.*  .text  .text.*)
     *libpp.a:( .literal  .literal.*  .text  .text.*)
-    *librtc_opensource.a:( .literal  .literal.*  .text  .text.*)
 
     _iram_text_end = ABSOLUTE(.);
     _iram_end = ABSOLUTE(.);
@@ -110,8 +109,8 @@ SECTIONS
     *(.dram0 .dram0.*)
 
     *( .data  .data.*  .dram1  .dram1.*)
-    *libspi_flash.a:spi_flash_raw.*( .rodata  .rodata.*)
     *liblog.a:( .rodata  .rodata.*)
+    *libspi_flash.a:spi_flash_raw.*( .rodata  .rodata.*)
 
     _data_end = ABSOLUTE(.);
     . = ALIGN(4);
@@ -163,7 +162,7 @@ SECTIONS
     _stext = .;
     _text_start = ABSOLUTE(.);
 
-    *(EXCLUDE_FILE(*libphy.a *libspi_flash.a:spi_flash_raw.* *libpp.a *librtc_opensource.a) .literal EXCLUDE_FILE(*libphy.a *libspi_flash.a:spi_flash_raw.* *libpp.a *librtc_opensource.a) .literal.* EXCLUDE_FILE(*libphy.a *libspi_flash.a:spi_flash_raw.* *libpp.a *librtc_opensource.a) .text EXCLUDE_FILE(*libphy.a *libspi_flash.a:spi_flash_raw.* *libpp.a *librtc_opensource.a) .text.*  .wifi0iram  .wifi0iram.*)
+    *(EXCLUDE_FILE(*libspi_flash.a:spi_flash_raw.* *libphy.a *libpp.a) .literal EXCLUDE_FILE(*libspi_flash.a:spi_flash_raw.* *libphy.a *libpp.a) .literal.* EXCLUDE_FILE(*libspi_flash.a:spi_flash_raw.* *libphy.a *libpp.a) .text EXCLUDE_FILE(*libspi_flash.a:spi_flash_raw.* *libphy.a *libpp.a) .text.*  .wifi0iram  .wifi0iram.*)
 
     /* For ESP8266 library function */
     *(.irom0.literal .irom0.text)
@@ -200,7 +199,7 @@ SECTIONS
 
     *(.rodata2 .rodata2.*)                       /* For ESP8266 library function */
 
-    *(EXCLUDE_FILE(*libspi_flash.a:spi_flash_raw.* *liblog.a) .rodata EXCLUDE_FILE(*libspi_flash.a:spi_flash_raw.* *liblog.a) .rodata.*)
+    *(EXCLUDE_FILE(*liblog.a *libspi_flash.a:spi_flash_raw.*) .rodata EXCLUDE_FILE(*liblog.a *libspi_flash.a:spi_flash_raw.*) .rodata.*)
 
     *(.irom1.text) /* catch stray ICACHE_RODATA_ATTR */
     *(.gnu.linkonce.r.*)

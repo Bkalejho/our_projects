@@ -1,4 +1,4 @@
-//16092019
+//23092019
 
 #include <stdio.h>
 #include <stdint.h>
@@ -28,7 +28,13 @@
 #include "lwip/apps/sntp.h"
 #include <time.h>
 
-typedef	char sample_mssg[100]; 			//Creates a variable wich is the least string size of each sample 
+#include "driver/gpio.h"
+#include "esp_system.h"
+
+
+
+
+typedef char sample_mssg[100];          //Creates a variable wich is the least string size of each sample 
 
 static const char *TAG = "JAL IoT Ubidots and MQTT";
 
@@ -46,10 +52,14 @@ uint8_t con_flag = 0;
 
 #define BROKER_PORT 1883
 #define BROKER_URL  "mqtt://industrial.api.ubidots.com"
-#define TOKEN   	"BBFF-6QgNNxNG9tBB0BtpKGagXOH6usY0DK"
+#define TOKEN       "BBFF-6QgNNxNG9tBB0BtpKGagXOH6usY0DK"
 #define UBI_TOPIC   "/v1.6/devices/esp_8266/temperature"
-#define	SSID_WIFI	"jony"
-#define	PASS_WIFI	"jfcr920210"
+#define SSID_WIFI   "jony"
+#define PASS_WIFI   "jfcr920210"
+
+#define LINK_LED    GPIO_NUM_16
+#define BAT_LED     GPIO_NUM_5
+#define SRC_TEST    GPIO_NUM_4
 
 
 
@@ -63,11 +73,11 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
             ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
             
             mqtt_con = 1;       //bandera de conexión 
-
+            gpio_set_level(LINK_LED, mqtt_con);
             break;
         case MQTT_EVENT_DISCONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
-			mqtt_con = 0;       //bandera de conexión             
+            mqtt_con = 0;       //bandera de conexión             
             /*con_flag++;
             if(con_flag>=3){
                 con_flag=0;
@@ -75,6 +85,8 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
                 fflush(stdout);
                 esp_restart();
             }*/
+
+            gpio_set_level(LINK_LED,mqtt_con);
             break;
 
         case MQTT_EVENT_SUBSCRIBED:
@@ -165,8 +177,17 @@ static void mqtt_app_start(void)
     esp_mqtt_client_start(client_h);
 }
 
-//-----------------------adc task----------------------------
+//-----------------------battery task----------------------------
+static void bat_task()
+{
+    for(;;)
+    {
+       gpio_set_level(BAT_LED, gpio_get_level(SRC_TEST)); 
+       vTaskDelay(1000 / portTICK_RATE_MS);
+    }
 
+}
+//-----------------------adc task----------------------------
 static void adc_task()
 {
     uint16_t adc_data[2];
@@ -185,8 +206,10 @@ static void adc_task()
 
     while (1) {
 
-    	time(&now);//ubidots requiere recibir el timestamp en milisegundos aqui esta en segundos
-    	localtime_r(&now, &timeinfo);
+        //gpio_set_level(BAT_LED, gpio_get_level(SRC_TEST));
+
+        time(&now);//ubidots requiere recibir el timestamp en milisegundos aqui esta en segundos
+        localtime_r(&now, &timeinfo);
         
         sprintf(fecha,"%u000",now);//se agregan 3 ceros para enviar la trama a ubidots de forma correcta
         printf("\r\n------------------------------------- New Sample --------------------------------------\r\n");
@@ -206,24 +229,24 @@ static void adc_task()
         sprintf(mensaje,"{\"value\": %d, %s,\"timestamp\": %s}", adc_data[0], context_mensaje, fecha);
 
         if(mqtt_con==1){
-        	if(mem_pos!=0){
-        		for(uint8_t i=0; i<mem_pos; i++){
-        			esp_mqtt_client_publish(client_h, UBI_TOPIC, memory[i], 0, 1, 0);
-        			vTaskDelay(10000 /portTICK_RATE_MS);	
-        		}
-        		mem_pos=0;
-        	}
-        	esp_mqtt_client_publish(client_h, UBI_TOPIC, mensaje, 0, 1, 0);
-        	ESP_LOGI(TAG,"MQTT conected \r\n");	
-        	ESP_LOGI(TAG,"%s \r\n", mensaje);
+            if(mem_pos!=0){
+                for(uint8_t i=0; i<mem_pos; i++){
+                    esp_mqtt_client_publish(client_h, UBI_TOPIC, memory[i], 0, 1, 0);
+                    vTaskDelay(10000 /portTICK_RATE_MS);    
+                }
+                mem_pos=0;
+            }
+            esp_mqtt_client_publish(client_h, UBI_TOPIC, mensaje, 0, 1, 0);
+            ESP_LOGI(TAG,"MQTT conected \r\n"); 
+            ESP_LOGI(TAG,"%s \r\n", mensaje);
         }else{
-        	ESP_LOGI(TAG,"MQTT disconected \r\n");
-        	strcpy(memory[mem_pos],mensaje);
-        	ESP_LOGI(TAG,"%s \r\n", memory[mem_pos]);
-        	mem_pos++;
-        	if(mem_pos>=10){
-        		mem_pos=0;
-        	}
+            ESP_LOGI(TAG,"MQTT disconected \r\n");
+            strcpy(memory[mem_pos],mensaje);
+            ESP_LOGI(TAG,"%s \r\n", memory[mem_pos]);
+            mem_pos++;
+            if(mem_pos>=10){
+                mem_pos=0;
+            }
         }
         
 
@@ -257,15 +280,15 @@ static void obtain_time(void)
         time(&now);
         localtime_r(&now, &timeinfo);
     }
-	// Set timezone to Standard Time to Colombia
-	//https://github.com/nayarsystems/posix_tz_db/blob/master/zones.csv
+    // Set timezone to Standard Time to Colombia
+    //https://github.com/nayarsystems/posix_tz_db/blob/master/zones.csv
     setenv("TZ", "<-05>5", 1);
     tzset();
 }
 
 static void ADC_conf (void)
 {
-	adc_config_t adc_config;
+    adc_config_t adc_config;
 
     // Depend on menuconfig->Component config->PHY->vdd33_const value
     // When measuring system voltage(ADC_READ_VDD_MODE), vdd33_const must be set to 255.
@@ -288,26 +311,33 @@ void app_main()
     esp_log_level_set("OUTBOX", ESP_LOG_VERBOSE);
 
     /*esp_err_t ret = nvs_flash_init();
-
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES) {
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
     }
-
     ESP_ERROR_CHECK(ret);
     nvs_flash_init();*/
     
     ADC_conf();
-	// 2. Create a adc task to read adc value
+    // 2. Create a adc task to read adc value
     wifi_init();
     mqtt_app_start();
+
+    gpio_set_direction(LINK_LED, GPIO_MODE_OUTPUT);
+    gpio_set_direction(BAT_LED, GPIO_MODE_OUTPUT);
+    gpio_set_direction(SRC_TEST, GPIO_MODE_INPUT);
+    gpio_set_pull_mode(SRC_TEST, GPIO_PULLUP_ONLY);
+
+
 
     while(mqtt_con==0){
         printf("Waiting for stable internet conection \r\n");
         vTaskDelay(2000 /portTICK_RATE_MS);
     }
+    
 
     printf("Internet conection succesfull \r\n");
     obtain_time();
+    xTaskCreate(bat_task, "bat_task", 176, NULL, 5, NULL);
     xTaskCreate(adc_task, "adc_task", 4096, NULL, 5, NULL);
 }
