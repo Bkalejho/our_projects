@@ -15,7 +15,7 @@
 #include "driver/adc.h"
 #include "esp_log.h"
 
-static const char *TAG = "adc example";
+static const char *TAG = "LM35 temperature";
 
 static void adc_task()
 {
@@ -25,8 +25,9 @@ static void adc_task()
     while (1) {
         if (ESP_OK == adc_read(&adc_data[0])) {
         	temp=adc_data[0];
-        	temp*=0.287;
-            ESP_LOGI(TAG, "adc read: %.1f\r\n", temp);
+        	temp*=0.002846;		//This has the ADC value ADC/(1/1023) multiply for the Voltage divisor factor (320K/100K)
+        	temp/=0.01;				//This line compute the temperature value for lm35
+            ESP_LOGI(TAG, "the temperature is: %.1f c \r\n", temp);
         }
 
         vTaskDelay(250 / portTICK_RATE_MS);
