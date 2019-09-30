@@ -13,6 +13,8 @@ _This test code shows how to configure gpio and how to use gpio interrupt._
 
 ### Hardware Required
 
+![adc](NodeMCU8266.jpg)  
+
  * Connect GPIO15 with GPIO4
  * Connect GPIO16 with GPIO5
 
