@@ -1,0 +1,15 @@
+gpio14 no funciona
+gpio12 no funciona
+13
+15
+1
+3
+10
+9
+
+funcionan
+16
+5
+4
+0
+2
