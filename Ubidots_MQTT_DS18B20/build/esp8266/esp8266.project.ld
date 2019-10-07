@@ -1,6 +1,6 @@
 /* Automatically generated file; DO NOT EDIT */
 /* Espressif IoT Development Framework Linker Script */
-/* Generated from: /home/alejandro/esp/ESP8266_RTOS_SDK/components/esp8266/ld/esp8266.project.ld.in */
+/* Generated from: /home/jcarmona/esp/ESP8266_RTOS_SDK/components/esp8266/ld/esp8266.project.ld.in */
 
 /*  Default entry point:  */
 ENTRY(call_start_cpu);
@@ -83,15 +83,29 @@ SECTIONS
     _iram_text_start = ABSOLUTE(.);
 
     *( .iram1  .iram1.*)
-    *libpp.a:( .literal  .literal.*  .text  .text.*)
     *libphy.a:( .literal  .literal.*  .text  .text.*)
     *libspi_flash.a:spi_flash_raw.*( .literal  .literal.*  .text  .text.*)
+    *libpp.a:( .literal  .literal.*  .text  .text.*)
 
     _iram_text_end = ABSOLUTE(.);
+  } > iram0_0_seg
+
+  .iram0.bss :
+  {
+    . = ALIGN (4);
+    /* Code marked as runnning out of IRAM */
+    _iram_bss_start = ABSOLUTE(.);
+
+    *libcore.a:( .bss  .bss.*  COMMON)
+    *libfreertos.a:( .bss  .bss.*  COMMON)
+    *liblwip.a:( .bss  .bss.*  COMMON)
+
+    . = ALIGN (4);
+    _iram_bss_end = ABSOLUTE(.);
     _iram_end = ABSOLUTE(.);
   } > iram0_0_seg
 
-  ASSERT(((_iram_text_end - ORIGIN(iram0_0_seg)) <= LENGTH(iram0_0_seg)),
+  ASSERT(((_iram_end - ORIGIN(iram0_0_seg)) <= LENGTH(iram0_0_seg)),
           "IRAM0 segment data does not fit.")
 
   .dram0.data :
@@ -109,8 +123,8 @@ SECTIONS
     *(.dram0 .dram0.*)
 
     *( .data  .data.*  .dram1  .dram1.*)
-    *liblog.a:( .rodata  .rodata.*)
     *libspi_flash.a:spi_flash_raw.*( .rodata  .rodata.*)
+    *liblog.a:( .rodata  .rodata.*)
 
     _data_end = ABSOLUTE(.);
     . = ALIGN(4);
@@ -136,7 +150,7 @@ SECTIONS
     . = ALIGN (8);
     _bss_start = ABSOLUTE(.);
 
-    *( .bss  .bss.*  COMMON)
+    *(EXCLUDE_FILE(*libcore.a *libfreertos.a *liblwip.a) .bss EXCLUDE_FILE(*libcore.a *libfreertos.a *liblwip.a) .bss.* EXCLUDE_FILE(*libcore.a *libfreertos.a *liblwip.a) COMMON)
 
     *(.dynsbss)
     *(.sbss)
@@ -162,7 +176,7 @@ SECTIONS
     _stext = .;
     _text_start = ABSOLUTE(.);
 
-    *(EXCLUDE_FILE(*libpp.a *libphy.a *libspi_flash.a:spi_flash_raw.*) .literal EXCLUDE_FILE(*libpp.a *libphy.a *libspi_flash.a:spi_flash_raw.*) .literal.* EXCLUDE_FILE(*libpp.a *libphy.a *libspi_flash.a:spi_flash_raw.*) .text EXCLUDE_FILE(*libpp.a *libphy.a *libspi_flash.a:spi_flash_raw.*) .text.*  .wifi0iram  .wifi0iram.*)
+    *(EXCLUDE_FILE(*libphy.a *libspi_flash.a:spi_flash_raw.* *libpp.a) .literal EXCLUDE_FILE(*libphy.a *libspi_flash.a:spi_flash_raw.* *libpp.a) .literal.* EXCLUDE_FILE(*libphy.a *libspi_flash.a:spi_flash_raw.* *libpp.a) .text EXCLUDE_FILE(*libphy.a *libspi_flash.a:spi_flash_raw.* *libpp.a) .text.*  .wifi0iram  .wifi0iram.*)
 
     /* For ESP8266 library function */
     *(.irom0.literal .irom0.text)
@@ -199,7 +213,7 @@ SECTIONS
 
     *(.rodata2 .rodata2.*)                       /* For ESP8266 library function */
 
-    *(EXCLUDE_FILE(*liblog.a *libspi_flash.a:spi_flash_raw.*) .rodata EXCLUDE_FILE(*liblog.a *libspi_flash.a:spi_flash_raw.*) .rodata.*)
+    *(EXCLUDE_FILE(*libspi_flash.a:spi_flash_raw.* *liblog.a) .rodata EXCLUDE_FILE(*libspi_flash.a:spi_flash_raw.* *liblog.a) .rodata.*)
 
     *(.irom1.text) /* catch stray ICACHE_RODATA_ATTR */
     *(.gnu.linkonce.r.*)

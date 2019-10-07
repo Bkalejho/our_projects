@@ -51,8 +51,8 @@ bool mqtt_con = 0;
 #define TOKEN       "BBFF-6QgNNxNG9tBB0BtpKGagXOH6usY0DK"
 #define UBI_TOPIC   "/v1.6/devices/esp_8266/temperature"
 
-#define SSID_WIFI   "HUAWEI P8 Alejho"
-#define PASS_WIFI   "11235813"
+#define SSID_WIFI   "jony"
+#define PASS_WIFI   "jfcr920210"
 
 #define LINK_LED        GPIO_NUM_5
 #define SENSOR_STATUS   GPIO_NUM_2
@@ -205,16 +205,25 @@ static void sensor_task()
 
     while (1) {
 
-        /*time(&now);                     //The timestamp for ubidots is in milliseconds, here the timestamp is in seconds
+
+
+        time(&now);                     //The timestamp for ubidots is in milliseconds, here the timestamp is in seconds
         localtime_r(&now, &timeinfo);
         sprintf(fecha,"%u000",now);     //this line add three zeros to timestamp to convert from seconds to milliseconds
         printf("\r\n------------------------------------- New Sample --------------------------------------\r\n");
         strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
         ESP_LOGI(TAG,"The current date/time in Bogotá is: %s \r\n", strftime_buf);
    
-        temperature = DS18B20();
+   		//esp_wifi_disconnect();
 
-        if (temperature != -1000) {
+   		printf("\r\n-------------------------stop wifi--------------------------------------\r\n");
+
+        //temperature = DS18B20();
+   		temperature=1000;
+
+
+        if (temperature != -1000) 
+        {
             gpio_set_level(SENSOR_STATUS, 0);
             ESP_LOGI(TAG, "the temperature is: %f.2\r\n", temperature);
             if(context){
@@ -223,36 +232,51 @@ static void sensor_task()
                 sprintf(context_mensaje,"\"context\": {\"name\": \"Baja Temperatura\"}");
             }
             sprintf(mensaje,"{\"value\": %.2f, %s,\"timestamp\": %s}", temperature, context_mensaje, fecha);
-            if(mqtt_con==1){
-                if(mem_pos!=0){
-                    for(uint8_t i=0; i<mem_pos; i++){
-                        esp_mqtt_client_publish(client_h, UBI_TOPIC, memory[i], 0, 1, 0);
+            
+            //wifi_init();
+
+
+   			printf("%.2f\r\n",temperature);
+            if(mqtt_con==1)
+            {
+                if(mem_pos!=0)
+                {
+                    for(uint8_t i=0; i<mem_pos; i++)
+                    {
+                        //esp_mqtt_client_publish(client_h, UBI_TOPIC, memory[i], 0, 1, 0);
                         vTaskDelay(10000 /portTICK_RATE_MS);    
                     }
                     mem_pos=0;
                 }
-                esp_mqtt_client_publish(client_h, UBI_TOPIC, mensaje, 0, 1, 0);
+                //esp_mqtt_client_publish(client_h, UBI_TOPIC, mensaje, 0, 1, 0);
                 ESP_LOGI(TAG,"MQTT conected \r\n"); 
                 ESP_LOGI(TAG,"%s \r\n", mensaje);
-            }else{
+            }
+            else
+            {
                 ESP_LOGI(TAG,"MQTT disconected \r\n");
                 strcpy(memory[mem_pos],mensaje);
                 ESP_LOGI(TAG,"%s \r\n", memory[mem_pos]);
                 mem_pos++;
-                if(mem_pos>=10){
+                if(mem_pos>=10)
+                {
                     mem_pos=0;
                 }
             }
-        }else{
+        }
+        else
+        {
             ESP_LOGI(TAG, "The sensor is unconnected\r\n");
             gpio_set_level(SENSOR_STATUS, 1);
         }
-        context = !context;
-        */
+        //context = !context;
+       
 
-        temperature = DS18B20();
-        printf("%.2f\r\n",temperature);
-        vTaskDelay(1000 / portTICK_RATE_MS); //sample time 3 minutes 
+        //temperature = DS18B20();
+        //printf("%.2f\r\n",temperature);
+
+
+        vTaskDelay(180000 / portTICK_RATE_MS); //sample time 3 minutes 
     }
 }
 
@@ -377,7 +401,8 @@ uint8_t read_DS18B20()
         __delay_1us;
         __delay_1us;
         Rx_18B20;                               // set pin to input
-        if(gpio_get_level(Port_18B20) != 0){
+        if(gpio_get_level(Port_18B20) != 0)
+        {
             result |= 1<<i;    
         }
         
@@ -387,12 +412,14 @@ uint8_t read_DS18B20()
     return result;
 }
 
-float DS18B20(){
+float DS18B20()
+{
     uint8_t tempL=0, tempH=0;
     int16_t temp_int=0;
     float temp=0;
 
-    if(reset_DS18B20()==0){
+    if(reset_DS18B20()==0)
+    {
         write_DS18B20(Skip_ROM);        
         write_DS18B20(Convert_T);       
         vTaskDelay(750/portTICK_RATE_MS);
@@ -409,7 +436,9 @@ float DS18B20(){
 
         printf("La medición es %.2f \r\n",temp);
         return temp; 
-    }else{
+    }
+    else
+    {
         printf("Sensor desconectado\r\n");
         return -1000;
     }
