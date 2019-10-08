@@ -87,12 +87,12 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
             mqtt_con = 1;       //bandera de conexión 
-            gpio_set_level(LINK_LED, mqtt_con);
+            gpio_set_level(LINK_LED, !mqtt_con);
             break;
         case MQTT_EVENT_DISCONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
             mqtt_con = 0;       //bandera de conexión             
-            gpio_set_level(LINK_LED,mqtt_con);
+            gpio_set_level(LINK_LED, !mqtt_con);
             break;
         case MQTT_EVENT_SUBSCRIBED:
             ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
@@ -203,29 +203,25 @@ static void sensor_task()
 
     vTaskDelay(2000 / portTICK_RATE_MS);
 
+	time(&now);                     //The timestamp for ubidots is in milliseconds, here the timestamp is in seconds
+    localtime_r(&now, &timeinfo);
+    strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
+    ESP_LOGI(TAG,"The current date/time in Bogotá is: %s \r\n", strftime_buf);
+
     while (1) {
-
-
-
-        time(&now);                     //The timestamp for ubidots is in milliseconds, here the timestamp is in seconds
+		
+		printf("\r\n------------------------------------- New Sample --------------------------------------\r\n");
+	    
+	    time(&now);                     //The timestamp for ubidots is in milliseconds, here the timestamp is in seconds
         localtime_r(&now, &timeinfo);
         sprintf(fecha,"%u000",now);     //this line add three zeros to timestamp to convert from seconds to milliseconds
-        printf("\r\n------------------------------------- New Sample --------------------------------------\r\n");
-        strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
-        ESP_LOGI(TAG,"The current date/time in Bogotá is: %s \r\n", strftime_buf);
-   
-   		//esp_wifi_disconnect();
-
-   		printf("\r\n-------------------------stop wifi--------------------------------------\r\n");
-
-        //temperature = DS18B20();
-   		temperature=1000;
-
-
-        if (temperature != -1000) 
+                   
+   		temperature = DS18B20();
+   		
+   		if (temperature != -1000) 
         {
             gpio_set_level(SENSOR_STATUS, 0);
-            ESP_LOGI(TAG, "the temperature is: %f.2\r\n", temperature);
+            ESP_LOGI(TAG, "the temperature is: %.2f\r\n", temperature);
             if(context){
                 sprintf(context_mensaje,"\"context\": {\"name\": \"Alta Temperatura\"}");
             }else{
@@ -233,30 +229,24 @@ static void sensor_task()
             }
             sprintf(mensaje,"{\"value\": %.2f, %s,\"timestamp\": %s}", temperature, context_mensaje, fecha);
             
-            //wifi_init();
-
-
-   			printf("%.2f\r\n",temperature);
             if(mqtt_con==1)
             {
                 if(mem_pos!=0)
                 {
                     for(uint8_t i=0; i<mem_pos; i++)
                     {
-                        //esp_mqtt_client_publish(client_h, UBI_TOPIC, memory[i], 0, 1, 0);
+                        esp_mqtt_client_publish(client_h, UBI_TOPIC, memory[i], 0, 1, 0);
                         vTaskDelay(10000 /portTICK_RATE_MS);    
                     }
                     mem_pos=0;
                 }
-                //esp_mqtt_client_publish(client_h, UBI_TOPIC, mensaje, 0, 1, 0);
+                esp_mqtt_client_publish(client_h, UBI_TOPIC, mensaje, 0, 1, 0);
                 ESP_LOGI(TAG,"MQTT conected \r\n"); 
-                ESP_LOGI(TAG,"%s \r\n", mensaje);
             }
             else
             {
                 ESP_LOGI(TAG,"MQTT disconected \r\n");
                 strcpy(memory[mem_pos],mensaje);
-                ESP_LOGI(TAG,"%s \r\n", memory[mem_pos]);
                 mem_pos++;
                 if(mem_pos>=10)
                 {
@@ -266,17 +256,11 @@ static void sensor_task()
         }
         else
         {
-            ESP_LOGI(TAG, "The sensor is unconnected\r\n");
+            ESP_LOGI(TAG, "The sensor is disconnected\r\n");
             gpio_set_level(SENSOR_STATUS, 1);
         }
-        //context = !context;
-       
-
-        //temperature = DS18B20();
-        //printf("%.2f\r\n",temperature);
-
-
-        vTaskDelay(180000 / portTICK_RATE_MS); //sample time 3 minutes 
+        context = !context;
+   		vTaskDelay(60000 / portTICK_RATE_MS); //sample time 3 minutes 
     }
 }
 
@@ -434,12 +418,15 @@ float DS18B20()
         temp=temp_int;
         temp*=0.0625;
 
-        printf("La medición es %.2f \r\n",temp);
-        return temp; 
+        if((temp>=-55)&&(temp<=150))
+        {
+        	return temp;
+        }else{
+        	return -1000;
+        }
     }
     else
     {
-        printf("Sensor desconectado\r\n");
         return -1000;
     }
 }
