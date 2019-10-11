@@ -1,0 +1,1 @@
+enviar context cuando se almacenen datos en la memoria interna y este debe tener el mensaje se presento falla de energia y falla de internet.
