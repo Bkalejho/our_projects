@@ -51,8 +51,8 @@ bool mqtt_con = 0;
 #define TOKEN       "BBFF-6QgNNxNG9tBB0BtpKGagXOH6usY0DK"
 #define UBI_TOPIC   "/v1.6/devices/esp_8266/temperature"
 
-#define SSID_WIFI   "jony"
-#define PASS_WIFI   "jfcr920210"
+#define SSID_WIFI   "Alejandro"
+#define PASS_WIFI   "bkalejho1234"
 
 #define LINK_LED        GPIO_NUM_5
 #define SENSOR_STATUS   GPIO_NUM_2
@@ -104,6 +104,11 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
             break;
         case MQTT_EVENT_PUBLISHED:
             ESP_LOGI(TAG, "MQTT_EVENT_PUBLISHED, msg_id=%d", event->msg_id);
+            gpio_set_level(LINK_LED, 0);
+            vTaskDelay(10 /portTICK_PERIOD_MS);
+            gpio_set_level(LINK_LED, 1);
+            vTaskDelay(10 /portTICK_PERIOD_MS);
+            gpio_set_level(LINK_LED, !mqtt_con);
             break;
         case MQTT_EVENT_DATA:
             ESP_LOGI(TAG, "MQTT_EVENT_DATA");
@@ -307,13 +312,15 @@ void app_main()
     esp_log_level_set("TRANSPORT", ESP_LOG_VERBOSE);
     esp_log_level_set("OUTBOX", ESP_LOG_VERBOSE);
 
+    gpio_set_direction(LINK_LED, GPIO_MODE_OUTPUT);
+    gpio_set_direction(SENSOR_STATUS, GPIO_MODE_OUTPUT);
+    gpio_set_level(LINK_LED, 1);
+    gpio_set_level(SENSOR_STATUS, 1);
+
     wifi_init();
     mqtt_app_start();
 
-    gpio_set_direction(LINK_LED, GPIO_MODE_OUTPUT);
-    gpio_set_direction(SENSOR_STATUS, GPIO_MODE_OUTPUT);
-    
-    while(mqtt_con==0){
+	while(mqtt_con==0){
         printf("Waiting for stable internet conection \r\n");
         vTaskDelay(2000 /portTICK_RATE_MS);
     }
