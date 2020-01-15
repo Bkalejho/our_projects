@@ -1,15 +1,14 @@
-src/aes.o: \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/util/src/aes.c \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/util/include/esp_aes.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/util/include/ibus_data.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/util/include/util_assert.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/our_projects/gpio/build/bootloader/../include/sdkconfig.h
+src/aes.o: /home/alejandro/esp/ESP8266_RTOS_SDK/components/util/src/aes.c \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/util/include/esp_aes.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/util/include/ibus_data.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/util/include/util_assert.h \
+ /home/alejandro/Io_Thix/our_projects/gpio/build/bootloader/../include/sdkconfig.h
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/util/include/esp_aes.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/util/include/esp_aes.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/util/include/ibus_data.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/util/include/ibus_data.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/util/include/util_assert.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/util/include/util_assert.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/our_projects/gpio/build/bootloader/../include/sdkconfig.h:
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/util/src/aes.c:
+/home/alejandro/Io_Thix/our_projects/gpio/build/bootloader/../include/sdkconfig.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/util/src/aes.c:

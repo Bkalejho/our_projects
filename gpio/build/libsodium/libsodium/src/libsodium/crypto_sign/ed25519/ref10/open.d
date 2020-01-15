@@ -1,90 +1,90 @@
 libsodium/src/libsodium/crypto_sign/ed25519/ref10/open.o: \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/crypto_sign/ed25519/ref10/open.c \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/limits.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/newlib.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdint.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/_default_types.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/features.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/_intsup.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/string.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/_ansi.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/config.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/ieeefp.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/esp8266/include/xtensa/config/core-isa.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/reent.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/_ansi.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/_types.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/_types.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/lock.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/cdefs.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/string.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_hash_sha512.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdlib.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/stdlib.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/alloca.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/export.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_sign_ed25519.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_hash_sha512.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_verify_32.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/crypto_sign/ed25519/ref10/ed25519_ref10.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/private/curve25519_ref10.h \
- /home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/utils.h
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/crypto_sign/ed25519/ref10/open.c \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/limits.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/newlib.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdint.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/_default_types.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/features.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/_intsup.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/string.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/_ansi.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/config.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/ieeefp.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/esp8266/include/xtensa/config/core-isa.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/reent.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/_ansi.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/_types.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/_types.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/lock.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/cdefs.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/string.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_hash_sha512.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdlib.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/stdlib.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/alloca.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/export.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_sign_ed25519.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_hash_sha512.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_verify_32.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/crypto_sign/ed25519/ref10/ed25519_ref10.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/private/curve25519_ref10.h \
+ /home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/utils.h
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/limits.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/limits.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/newlib.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/newlib.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdint.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdint.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/_default_types.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/_default_types.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/features.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/features.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/_intsup.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/_intsup.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/string.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/string.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/_ansi.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/_ansi.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/config.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/config.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/ieeefp.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/ieeefp.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/esp8266/include/xtensa/config/core-isa.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/esp8266/include/xtensa/config/core-isa.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/reent.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/reent.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/_ansi.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/_ansi.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/_types.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/_types.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/_types.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/_types.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/lock.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/lock.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/cdefs.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/cdefs.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/string.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/string.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_hash_sha512.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_hash_sha512.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdlib.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdlib.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/stdlib.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/stdlib.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/alloca.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/newlib/newlib/include/alloca.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/export.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/export.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_sign_ed25519.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_sign_ed25519.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_hash_sha512.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_hash_sha512.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_verify_32.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/crypto_verify_32.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/crypto_sign/ed25519/ref10/ed25519_ref10.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/crypto_sign/ed25519/ref10/ed25519_ref10.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/private/curve25519_ref10.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/private/curve25519_ref10.h:
 
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/utils.h:
-/home/azulyblanco/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/crypto_sign/ed25519/ref10/open.c:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/include/sodium/utils.h:
+/home/alejandro/esp/ESP8266_RTOS_SDK/components/libsodium/libsodium/src/libsodium/crypto_sign/ed25519/ref10/open.c:
