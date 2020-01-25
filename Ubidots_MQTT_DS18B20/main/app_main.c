@@ -51,8 +51,11 @@ bool mqtt_con = 0;
 #define TOKEN       "BBFF-6QgNNxNG9tBB0BtpKGagXOH6usY0DK"
 #define UBI_TOPIC   "/v1.6/devices/esp_8266/temperature"
 
-#define SSID_WIFI   "Alejandro"
-#define PASS_WIFI   "bkalejho1234"
+//#define SSID_WIFI   "Alejandro"
+//#define PASS_WIFI   "bkalejho1234"
+
+#define SSID_WIFI   "jony"
+#define PASS_WIFI   "jfcr920210"
 
 #define LINK_LED        GPIO_NUM_5
 #define SENSOR_STATUS   GPIO_NUM_2
