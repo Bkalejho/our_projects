@@ -26,6 +26,9 @@
     ```
 7) Reebot your pc
 8) Again update upgrade apt-get and apt
-
-
+9) Install git 
+    ```
+    sudo apt-get install git
+    ```
+    
 ### Enjoy your debain distro 
