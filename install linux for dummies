@@ -1,0 +1,12 @@
+download your prefered version of debian linux
+install linux
+update upgrade apt-get and apt 
+install pip and setuptool for python2 and python3
+create "alias python=python3" inside of bashsrc or profilesrc
+add the user to dialout group
+  sudo usermod -a -G dialout $USER
+reebot your pc
+again update upgrade apt-get and apt
+
+
+enjoy your debain distro 
