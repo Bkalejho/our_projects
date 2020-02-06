@@ -1,10 +1,6 @@
-/* BSD Socket API Example
-
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
+/*IoThix - socket client through TCP
+    Hector Alejandro Beltrán Torres
+    Jony Fredy Carmona Rodriguez
 */
 #include <string.h>
 #include <sys/param.h>
@@ -22,22 +18,16 @@
 #include "lwip/sys.h"
 #include <lwip/netdb.h>
 
+//Wifi credentials
+#define WIFI_SSID "HUAWEI P8 Alejho"
+#define WIFI_PASS "11235813"
 
-/* The examples use simple WiFi configuration that you can set via
-   'make menuconfig'.
-   If you'd rather not, just change the below entries to strings with
-   the config you want - ie #define EXAMPLE_WIFI_SSID "mywifissid"
-*/
-#define EXAMPLE_WIFI_SSID CONFIG_WIFI_SSID
-#define EXAMPLE_WIFI_PASS CONFIG_WIFI_PASSWORD
+//Server's IP addres
+#define HOST_IP_ADDR "192.168.43.138"
+// #define HOST_IP_ADDR "Write here your ipv6 addres"
 
-#ifdef CONFIG_EXAMPLE_IPV4
-#define HOST_IP_ADDR CONFIG_EXAMPLE_IPV4_ADDR
-#else
-#define HOST_IP_ADDR CONFIG_EXAMPLE_IPV6_ADDR
-#endif
-
-#define PORT CONFIG_EXAMPLE_PORT
+//Socket's port
+#define PORT 12345
 
 /* FreeRTOS event group to signal when we are connected & ready to make a request */
 static EventGroupHandle_t wifi_event_group;
@@ -106,8 +96,8 @@ static void initialise_wifi(void)
     ESP_ERROR_CHECK( esp_wifi_set_storage(WIFI_STORAGE_RAM) );
     wifi_config_t wifi_config = {
         .sta = {
-            .ssid = EXAMPLE_WIFI_SSID,
-            .password = EXAMPLE_WIFI_PASS,
+            .ssid = WIFI_SSID,
+            .password = WIFI_PASS,
         },
     };
     ESP_LOGI(TAG, "Setting WiFi configuration SSID %s...", wifi_config.sta.ssid);
@@ -161,6 +151,7 @@ static void tcp_client_task(void *pvParameters)
             int sock =  socket(addr_family, SOCK_STREAM, ip_protocol);
             if (sock < 0) {
                 ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
+                vTaskDelay(1000 / portTICK_PERIOD_MS);
                 break;
             }
             ESP_LOGI(TAG, "Socket created");
