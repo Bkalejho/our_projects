@@ -48,7 +48,7 @@ const int IPV6_GOTIP_BIT = BIT1;
 #endif
 
 static const char *TAG = "example";
-static const char *payload = "Message from ESP32 ";
+static const char payload[100];
 
 static esp_err_t event_handler(void *ctx, system_event_t *event)
 {
@@ -156,22 +156,29 @@ static void tcp_client_task(void *pvParameters)
         inet6_ntoa_r(destAddr.sin6_addr, addr_str, sizeof(addr_str) - 1);
 #endif
 
-        int sock =  socket(addr_family, SOCK_STREAM, ip_protocol);
-        if (sock < 0) {
-            ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
-            break;
-        }
-        ESP_LOGI(TAG, "Socket created");
+        for(int i = 0 ; i < 100; i++ ) {
 
-        int err = connect(sock, (struct sockaddr *)&destAddr, sizeof(destAddr));
-        if (err != 0) {
-            ESP_LOGE(TAG, "Socket unable to connect: errno %d", errno);
-        }
-        ESP_LOGI(TAG, "Successfully connected");
+            int sock =  socket(addr_family, SOCK_STREAM, ip_protocol);
+            if (sock < 0) {
+                ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
+                break;
+            }
+            ESP_LOGI(TAG, "Socket created");
 
-        while (1) {
-            int err = send(sock, payload, strlen(payload), 0);
-            if (err < 0) {
+            int err = connect(sock, (struct sockaddr *)&destAddr, sizeof(destAddr));
+            if (err != 0) {
+                ESP_LOGE(TAG, "Socket unable to connect: errno %d", errno);
+            }
+            ESP_LOGI(TAG, "Successfully connected");
+
+            if(i == 0){
+                sprintf(payload, "Hi from ESP8266 thanks for listening ");
+            }else{
+                sprintf(payload, "This is the iteration number %i ", i);
+            }
+
+            int err1 = send(sock, payload, strlen(payload), 0);
+            if (err1 < 0) {
                 ESP_LOGE(TAG, "Error occured during sending: errno %d", errno);
                 break;
             }
@@ -189,14 +196,16 @@ static void tcp_client_task(void *pvParameters)
                 ESP_LOGI(TAG, "%s", rx_buffer);
             }
 
+            shutdown(sock, 0);
+            close(sock);
             vTaskDelay(2000 / portTICK_PERIOD_MS);
         }
 
-        if (sock != -1) {
-            ESP_LOGE(TAG, "Shutting down socket and restarting...");
-            shutdown(sock, 0);
-            close(sock);
-        }
+        // if (sock != -1) {
+        //     ESP_LOGE(TAG, "Shutting down socket and restarting...");
+        //     shutdown(sock, 0);
+        //     close(sock);
+        // }
     }
     vTaskDelete(NULL);
 }
