@@ -23,11 +23,11 @@
 #define WIFI_PASS "11235813"
 
 //Server's IP addres
-#define HOST_IP_ADDR "192.168.43.138"
+#define HOST_IP_ADDR "179.18.35.9"
 // #define HOST_IP_ADDR "Write here your ipv6 addres"
 
 //Socket's port
-#define PORT 12345
+#define PORT 9004
 
 /* FreeRTOS event group to signal when we are connected & ready to make a request */
 static EventGroupHandle_t wifi_event_group;
