@@ -19,11 +19,11 @@
 #include <lwip/netdb.h>
 
 //Wifi credentials
-#define WIFI_SSID "HUAWEI P8 Alejho"
+#define WIFI_SSID "Alejandro_casa"
 #define WIFI_PASS "11235813"
 
 //Server's IP addres
-#define HOST_IP_ADDR "179.18.35.9"
+#define HOST_IP_ADDR "192.168.1.2"
 // #define HOST_IP_ADDR "Write here your ipv6 addres"
 
 //Socket's port
