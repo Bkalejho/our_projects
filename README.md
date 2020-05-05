@@ -1,4 +1,4 @@
-# This is the official repository of ioThix developments over ESP8266 chip using FreeRTOS
+# This is the official repository of IoThix developments over ESP8266 chip using FreeRTOS
 
 If you want to compile and boot this projects you have to set up the toolchain as this tutorial explain
 
