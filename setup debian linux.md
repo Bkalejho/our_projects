@@ -31,4 +31,4 @@
     sudo apt-get install git
     ```
     
-### Enjoy your debain distro 
+### Enjoy your debian distro 
